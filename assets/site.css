@@ -1,0 +1,578 @@
+/* Three worlds under one name, each with a single committed look.
+   Motion rule: every movement re-enacts the idea of the work it sits on (見立て),
+   nothing moves only to decorate. */
+:root{
+  color-scheme:light;
+  --paper:#ffffff; --ink:#1b1c20; --grey:#73757e; --hair:#e3e3e7; --soft:#f5f5f7;
+  --cobalt:#1f5fd1; --sun:#ffc21a; --char-ink:#2a1d0c; --lip:#c8102e;
+  --serif:"EB Garamond","Shippori Mincho",Georgia,serif;
+  --mincho:"Shippori Mincho","EB Garamond","Hiragino Mincho ProN",serif;
+  --sans:"DM Sans","Zen Kaku Gothic New",system-ui,-apple-system,"Hiragino Sans",sans-serif;
+  --gothic:"Zen Kaku Gothic New","DM Sans","Hiragino Sans",sans-serif;
+  --round:"Fredoka","Zen Maru Gothic","Hiragino Maru Gothic ProN",system-ui,sans-serif;
+  --maru:"Zen Maru Gothic","Fredoka","Hiragino Maru Gothic ProN",sans-serif;
+  --hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --ease:cubic-bezier(.7,0,.2,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+img{max-width:100%;display:block}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.g{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.in{max-width:1180px;margin:0 auto}
+.view[hidden]{display:none!important}
+.replay{font:500 .78rem var(--sans);background:none;border:1px solid currentColor;border-radius:999px;padding:3px 12px;cursor:pointer;color:inherit;opacity:.7;margin-top:16px}
+.replay:hover{opacity:1}
+
+/* ---------- top bar ---------- */
+.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding-block:20px}
+.who{text-decoration:none;display:flex;align-items:baseline;gap:12px}
+.who b{font-family:var(--serif);font-weight:500;font-size:1.35rem}
+.who span{font-family:var(--mincho);font-size:.82rem;letter-spacing:.18em;opacity:.65}
+.switch{display:flex;flex-wrap:wrap;gap:8px}
+.switch a{text-decoration:none;font-size:.86rem;padding:5px 12px;border-radius:2px;border:1px solid transparent}
+.switch .s-d{font-family:var(--serif);font-size:1rem;font-style:italic}
+.switch .s-i{font-family:var(--sans);font-weight:800}
+.switch .s-c{font-family:var(--round);font-weight:600;border-radius:999px}
+.switch a[aria-current]{border-color:currentColor}
+
+/* ---------- world switch: you cross into another world's paper ---------- */
+.wipe{position:fixed;inset:0;z-index:50;pointer-events:none;transform:scaleX(0)}
+.wipe.go{animation:wipe .8s var(--ease) forwards}
+@keyframes wipe{0%{transform:scaleX(0);transform-origin:left}45%,55%{transform:scaleX(1);transform-origin:left}56%{transform-origin:right}100%{transform:scaleX(0);transform-origin:right}}
+
+/* ---------- HOME ---------- */
+#home .intro{padding-block:40px 36px;max-width:760px}
+#home h1{margin:0 0 14px;font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.12;text-wrap:balance}
+#home .intro p{margin:0;color:var(--grey);max-width:58ch}
+.doors{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px;padding-bottom:56px}
+.door{display:flex;flex-direction:column;justify-content:space-between;min-height:520px;padding:26px;text-decoration:none;overflow:hidden;position:relative}
+.door .pic{flex:1;display:grid;place-items:center;padding:18px 0;position:relative}
+.door .pic img{max-height:300px;width:auto}
+.door small{display:block;opacity:.7;font-size:.82rem}
+.door .lead{margin:6px 0 0;font-size:.95rem}
+@media (min-width:900px){
+  .doors{display:flex}
+  .door{flex:1 1 0;transition:flex-grow .6s cubic-bezier(.2,.8,.2,1)}
+  .doors:hover .door{flex-grow:.85}
+  .doors .door:hover,.doors .door:focus-visible{flex-grow:1.4}
+}
+.d-design{background:var(--paper);border:1px solid var(--hair)}
+.d-design h2{font-family:var(--serif);font-weight:400;font-size:2.1rem;margin:0;line-height:1.05}
+.d-design small{font-family:var(--mincho);letter-spacing:.2em}
+.d-design .lead{font-family:var(--serif);font-style:italic;color:var(--grey)}
+/* the design door shows the trick in miniature: a glyph that is also a wrestler */
+.d-design .glyph{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mincho);font-weight:500;font-size:190px;line-height:1;transition:opacity .6s ease}
+.d-design .pic img{opacity:0;transition:opacity .6s ease}
+.d-design:hover .glyph,.d-design:focus-visible .glyph{opacity:0}
+.d-design:hover .pic img,.d-design:focus-visible .pic img{opacity:1}
+.d-illust{background:var(--cobalt);color:#fff}
+.d-illust h2{font-family:var(--sans);font-weight:800;font-size:2.1rem;margin:0;line-height:1.05}
+.d-illust small{font-family:var(--gothic);letter-spacing:.1em}
+.d-illust .pic img{box-shadow:0 18px 40px rgba(0,0,30,.35)}
+.d-char{background:var(--sun);color:var(--char-ink)}
+.d-char h2{font-family:var(--round);font-weight:700;font-size:2.2rem;margin:0;line-height:1;position:relative;display:inline-block}
+.d-char small{font-family:var(--maru);font-weight:700}
+.d-char .crew{display:flex;align-items:flex-end;justify-content:center}
+.d-char .crew img{height:190px;width:auto;margin:0 -14px;transition:margin .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1);transform-origin:bottom center}
+@media (min-width:900px){.doors .d-char:hover .crew img,.doors .d-char:focus-visible .crew img{margin:0 6px;transform:scale(1.12)}.doors:hover .d-char:not(:hover) .crew img{margin:0 -22px;transform:scale(.94)}}
+
+/* ---------- DESIGN world ---------- */
+#design .bar{position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:5}
+#design .head{padding-block:56px 40px;border-bottom:1px solid var(--hair)}
+#design .head h1{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1}
+#design .head h1 span{display:block;font-family:var(--mincho);font-size:.9rem;letter-spacing:.3em;color:var(--grey);margin-top:14px}
+#design .head p{font-family:var(--serif);font-size:1.25rem;font-style:italic;color:var(--grey);margin:18px 0 0;max-width:46ch}
+.dw{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px 56px;padding-block:56px;border-bottom:1px solid var(--hair);align-items:center}
+.dw.alt .stage{order:2}
+.stage{background:var(--soft);position:relative;aspect-ratio:4/3;overflow:hidden;display:grid;place-items:center;max-width:100%}
+.stage > img{max-height:88%;max-width:88%;width:auto;height:auto}
+.dw h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+.dw .meta{font-family:var(--serif);font-style:italic;color:var(--grey);margin:0 0 18px}
+.dw .meta b{font-style:normal;font-weight:500;color:var(--cobalt);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-right:10px;font-family:var(--sans)}
+.dw p{font-family:var(--serif);font-size:1.12rem;line-height:1.6;margin:0;max-width:44ch}
+.dw .how{font-family:var(--sans);font-size:.8rem;color:var(--grey);margin-top:14px;letter-spacing:.02em}
+.layer{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .8s ease,transform 1s var(--ease)}
+.layer img{max-height:88%;max-width:88%;width:auto}
+
+/* 1. Sumo: 角力 → 角 → the wrestler */
+.sumo .kanji{font-family:var(--mincho);font-weight:500;font-size:clamp(90px,14vw,180px);line-height:1;display:flex;gap:.04em}
+.sumo .kanji span{display:inline-block;transition:opacity .8s ease,transform 1s var(--ease)}
+.sumo .l-mark,.sumo .l-ring{opacity:0}
+.sumo.s1 .k-ryoku{opacity:0;transform:translateX(40%)}
+.sumo.s1 .k-kaku{transform:translateX(50%)}
+.sumo.s2 .l-kanji{opacity:0;transform:scale(1.15)}
+.sumo.s2 .l-mark{opacity:1}
+.sumo.s3 .l-mark{opacity:0}
+.sumo.s3 .l-ring{opacity:1}
+
+/* 2. TSUBAKI: the lines are written first, then the poster arrives */
+
+/* 3. XXX: three letters, then you read them as kisses */
+.xxx .l-photo img{filter:grayscale(1) contrast(.9);transition:filter 1.2s ease}
+.xxx .x{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--hand);font-size:clamp(70px,12vw,150px);color:#fff;letter-spacing:.08em;text-shadow:0 2px 12px rgba(0,0,0,.25);transition:color 1s ease}
+.xxx .read{position:absolute;left:0;right:0;bottom:6%;text-align:center;font-family:var(--serif);font-style:italic;color:#fff;font-size:1.2rem;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.xxx .read span{transition:opacity .6s ease}
+.xxx .read .b{position:absolute;left:0;right:0;opacity:0}
+.xxx.s1 .x{color:var(--lip)}
+.xxx.s1 .l-photo img{filter:none}
+.xxx.s1 .read .a{opacity:0}
+.xxx.s1 .read .b{opacity:1}
+
+/* 4. Wacoal: the card that gets kept is a card that opens */
+.wacoal{perspective:1400px}
+.wacoal .l-closed{transform-origin:15% 50%;transition:transform 1.2s var(--ease),opacity .5s ease .7s}
+.wacoal .l-open{opacity:0;transform:scale(.94)}
+.wacoal.s1 .l-closed{transform:rotateY(-80deg);opacity:0}
+.wacoal.s1 .l-open{opacity:1;transform:none;transition-delay:.5s}
+
+/* 5. Eraser car: the line behind it is gone */
+.eraser .ers{position:absolute;left:50%;top:50%;height:88%;width:auto;aspect-ratio:525/708;transform:translate(-50%,-50%);box-shadow:0 1px 2px rgba(0,0,0,.1),0 10px 28px rgba(0,0,0,.08);overflow:hidden}
+.eraser .ers .car{opacity:0}
+
+/* 6. Tosho card: a book that keeps turning into something else */
+.tosho .layer{opacity:0;transform:scale(.97)}
+.tosho .layer.on{opacity:1;transform:none}
+.tosho .say{position:absolute;right:6%;top:8%;font-family:var(--mincho);font-weight:700;font-size:clamp(38px,6vw,64px);line-height:1;color:var(--ink);transition:opacity .4s}
+
+/* ---------- ILLUSTRATION world ---------- */
+#illustration{font-family:var(--sans);color:#fff;background:var(--cobalt);transition:background-color .8s ease,color .8s ease}
+#illustration .head{padding-block:64px 56px}
+#illustration .head h1{margin:0;font-weight:800;font-size:clamp(2.6rem,8vw,6rem);line-height:.95;letter-spacing:-.03em}
+#illustration .head h1 span{display:block;font-family:var(--gothic);font-weight:700;font-size:1rem;letter-spacing:.2em;margin-top:16px;opacity:.8}
+#illustration .head p{font-size:1.15rem;max-width:46ch;margin:18px 0 0;opacity:.92}
+.band{padding-block:clamp(40px,7vw,88px)}
+.band .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 56px;align-items:center}
+.band.rev .art{order:2}
+.band .art img{margin:0 auto;max-height:620px;width:auto;box-shadow:0 22px 50px rgba(0,0,0,.28)}
+.band .art.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.band h2{font-weight:800;font-size:clamp(1.8rem,4vw,3rem);line-height:1;letter-spacing:-.02em;margin:0 0 12px}
+.band .kind{font-family:var(--gothic);font-weight:700;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin:0 0 14px}
+.band p{font-size:1.08rem;margin:0;max-width:42ch}
+
+/* ---------- CHARACTER world ---------- */
+#character{background:var(--sun);color:var(--char-ink);font-family:var(--round)}
+#character .head{padding-block:56px 24px}
+#character .head h1{margin:0;font-weight:700;font-size:clamp(2.6rem,8vw,6rem);line-height:.95}
+#character .head h1 span{display:block;font-family:var(--maru);font-size:1rem;margin-top:12px}
+#character .head p{font-weight:500;font-size:1.2rem;max-width:44ch;margin:16px 0 0}
+.lineup{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));align-items:end;gap:16px clamp(12px,2.5vw,40px);padding-block:28px 12px}
+.lineup figure{margin:0;text-align:center;min-width:0}
+.lineup img{height:auto;max-height:clamp(130px,20vw,250px);width:auto;max-width:100%;margin:0 auto}
+@media (max-width:760px){.lineup{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 12px}.lineup img{max-height:150px}}
+.pill{display:inline-block;background:#fff;border:2.5px solid var(--char-ink);border-radius:999px;padding:2px 12px;font-weight:600;font-size:.86rem;margin-top:6px;white-space:nowrap}
+.csec{padding-block:44px}
+.csec h2{font-weight:700;font-size:clamp(1.6rem,4vw,2.4rem);margin:0 0 6px}
+.csec .sub{font-weight:500;margin:0 0 24px;max-width:56ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px}
+.card{background:#fff;border:3px solid var(--char-ink);border-radius:26px;padding:22px;box-shadow:6px 6px 0 var(--char-ink);min-width:0}
+.card .row{display:flex;align-items:flex-end;justify-content:center;gap:6px;min-height:240px;position:relative}
+.card .row img{max-height:240px;width:auto;min-width:0;max-width:100%;object-fit:contain}
+.card .row:has(img+img) img{flex:1 1 0;width:0}
+.card h3{margin:14px 0 2px;font-weight:700;font-size:1.25rem}
+.card p{margin:0;font-family:var(--maru);font-weight:500;font-size:.9rem;opacity:.85}
+.card .tag{display:inline-block;background:var(--sun);border-radius:999px;padding:1px 10px;font-size:.75rem;font-weight:600;margin-bottom:6px}
+/* Noriko & Ren: a character is delivered as a set of views; step through them */
+.turn{position:relative;min-height:240px}
+.turn img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);max-height:240px;width:auto;opacity:0;transition:opacity .35s}
+.turn img.on{opacity:1}
+.views{display:flex;gap:6px;margin-top:10px}
+.views button{font:600 .75rem var(--round);border:2px solid var(--char-ink);background:#fff;border-radius:999px;padding:1px 10px;cursor:pointer;color:var(--char-ink)}
+.views button[aria-pressed="true"]{background:var(--char-ink);color:#fff}
+/* Nekojama: a message arrives, then a cat lies down on it */
+.chat{background:#8cabd9;border:3px solid var(--char-ink);border-radius:26px;padding:22px clamp(12px,3vw,28px);box-shadow:6px 6px 0 var(--char-ink);display:grid;gap:6px;max-width:760px}
+.msg{position:relative;width:min(100%,340px);aspect-ratio:370/320}
+.msg:nth-child(even){justify-self:end}
+.msg .bubble{position:absolute;left:3%;right:3%;top:44%;height:19%;background:#fff;border-radius:18px;display:flex;align-items:center;padding:0 7%;white-space:nowrap;overflow:hidden;font-family:var(--round);font-weight:600;font-size:clamp(.9rem,2.6vw,1.25rem);color:#222;opacity:0;transform:scale(.6);transform-origin:left center;transition:opacity .3s,transform .4s cubic-bezier(.3,1.5,.5,1)}
+.msg .bubble small{font-family:var(--round);font-weight:500;font-size:.7em;opacity:.55;margin-left:.6em}
+.msg .cat{position:absolute;inset:0;width:100%;height:100%;opacity:0;transform:translateY(-70%)}
+.msg.s1 .bubble{opacity:1;transform:none}
+.msg.s2 .cat{opacity:1;transform:none;transition:transform .55s cubic-bezier(.3,1.35,.5,1),opacity .15s}
+.msg.s2 .bubble{opacity:0;transition:opacity .2s .35s}
+.typing{font:600 .8rem var(--round);color:#fff;opacity:.85;min-height:1.2em}
+
+/* ---------- contact strip ---------- */
+.cta{padding-block:56px 64px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:16px 40px}
+.cta p{margin:0;font-size:clamp(1.3rem,3vw,1.9rem);max-width:30ch;text-wrap:balance}
+.cta a{text-decoration:none;border-bottom:2px solid currentColor;padding-bottom:2px;font-weight:500}
+#design .cta p{font-family:var(--serif)}
+#illustration .cta p{font-weight:800}
+#character .cta p{font-weight:700}
+footer{font-size:.76rem;padding-block:0 28px;opacity:.7}
+
+
+/* ================= HOME: the whole body of work, in its three worlds ================= */
+.ab{padding-block:44px 52px}
+.ab-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px;margin-bottom:24px}
+.ab-head h3{margin:0}
+.ab-head a{font-size:.9rem;text-decoration:none;border-bottom:1px solid currentColor}
+.tiles{display:grid;gap:18px}
+.tile{text-decoration:none;display:block;min-width:0}
+.tile .t-img{display:grid;place-items:center;aspect-ratio:1;overflow:hidden}
+.tile img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.tile span{display:block;margin-top:8px;font-size:.85rem;line-height:1.3}
+.ab-d{background:#fff;border-top:1px solid var(--hair)}
+.ab-d h3{font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.4vw,2.6rem)}
+.ab-d .tiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr))}
+.ab-d .t-img{background:var(--soft);padding:12%;transition:background .3s}
+.ab-d .tile span{font-family:var(--serif);font-size:1rem}
+.ab-d .tile:hover .t-img{background:var(--hair)}
+.ab-i{background:var(--cobalt);color:#fff}
+.ab-i h3{font-family:var(--sans);font-weight:800;font-size:clamp(1.9rem,3.6vw,2.8rem);letter-spacing:-.02em}
+.ab-i .tiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr))}
+.ab-i .t-img{padding:6%}
+.ab-i img{box-shadow:0 10px 24px rgba(0,0,0,.3);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.ab-i .tile:hover img{transform:translateY(-6px)}
+.ab-i .tile span{font-weight:700}
+.ab-c{background:var(--sun);color:var(--char-ink)}
+.ab-c h3{font-family:var(--round);font-weight:700;font-size:clamp(1.9rem,3.6vw,2.8rem)}
+.ab-c .tiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,110px),1fr))}
+.ab-c .t-img{aspect-ratio:3/4;align-items:end}
+.ab-c img{transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.ab-c .tile:hover img{transform:translateY(-10px)}
+.ab-c .tile span{font-family:var(--round);font-weight:600;text-align:center}
+
+/* ================= staging: entrances in each world's manner ================= */
+.pre{opacity:0}
+.rv{transition:opacity .8s ease,transform .9s cubic-bezier(.2,.75,.2,1)}
+.dw.rv.pre,.band.rv.pre,.rvt.rv.pre{opacity:1}
+.dw.pre .stage{clip-path:inset(0 0 100% 0)}
+.dw.pre h2,.dw.pre .meta,.dw.pre p,.dw.pre .replay{opacity:0;transform:translateY(14px)}
+.dw .stage{transition:clip-path 1s var(--ease)}
+.dw h2,.dw .meta,.dw p,.dw .replay{transition:opacity .7s ease .3s,transform .7s ease .3s}
+.band.pre .art{opacity:0;transform:translateY(70px)}
+.band.pre .in > div:last-child{opacity:0;transform:translateX(-40px)}
+.band .art,.band .in > div:last-child{transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1)}
+.band .in > div:last-child{transition-delay:.15s}
+.csec.pre{transform:translateY(40px) scale(.97)}
+.csec{transition:opacity .6s ease,transform .7s cubic-bezier(.3,1.45,.5,1)}
+.rvt.pre .tile{opacity:0;transform:translateY(24px)}
+.rvt .tile{transition:opacity .6s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.ab-c .rvt.pre .tile{transform:scale(.5) translateY(30px)}
+.ab-c .rvt .tile{transition:opacity .4s ease,transform .6s cubic-bezier(.3,1.6,.5,1)}
+/* world titles arrive in their own voice */
+@keyframes inSerif{from{opacity:0;letter-spacing:.12em}to{opacity:1;letter-spacing:0}}
+@keyframes inBold{from{opacity:0;transform:translateY(60%)}to{opacity:1;transform:none}}
+@keyframes inPop{0%{opacity:0;transform:scale(.4)}60%{opacity:1;transform:scale(1.08)}100%{transform:scale(1)}}
+#design.entered .head h1{animation:inSerif 1.2s var(--ease) both}
+#illustration.entered .head h1{animation:inBold .8s cubic-bezier(.2,.8,.2,1) both}
+#character.entered .head h1{animation:inPop .7s cubic-bezier(.3,1.5,.5,1) both;transform-origin:left bottom}
+#character.entered .lineup figure{animation:inPop .6s cubic-bezier(.3,1.5,.5,1) both}
+#character.entered .lineup figure:nth-child(2){animation-delay:.08s}#character.entered .lineup figure:nth-child(3){animation-delay:.16s}#character.entered .lineup figure:nth-child(4){animation-delay:.24s}#character.entered .lineup figure:nth-child(5){animation-delay:.32s}#character.entered .lineup figure:nth-child(6){animation-delay:.4s}
+.lineup figure img{transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.lineup figure:hover img{transform:translateY(-12px)}
+.card{transition:transform .3s cubic-bezier(.3,1.6,.5,1),box-shadow .3s}
+.card:hover{transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--char-ink)}
+
+/* ================= picture book: real spreads, the right page turns over ================= */
+.fbook{position:relative;width:100%;max-width:680px;margin:0 auto;aspect-ratio:1335/891;perspective:2200px}
+.fbook .base{position:absolute;inset:0;background:#f4ead8;box-shadow:0 24px 50px rgba(0,0,0,.3);transition:left .6s var(--ease)}
+.fbook .base.closed{left:50%}
+.fbook .pg{position:absolute;top:0;bottom:0;width:50%;background-repeat:no-repeat}
+.fbook .L{left:0}
+.fbook .R{right:0}
+.fbook .cover{background-size:cover!important;background-position:center!important}
+.fbook .blank{background:transparent!important}
+.fbook .spine{position:absolute;top:0;bottom:0;left:50%;width:44px;margin-left:-22px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.16) 50%,transparent);pointer-events:none;z-index:4}
+.leaf{position:absolute;top:0;bottom:0;width:50%;transform-style:preserve-3d;z-index:3;display:none}
+.leaf.next{left:50%;transform-origin:left center}
+.leaf.prev{left:0;transform-origin:right center}
+.leaf .face{position:absolute;inset:0;background-repeat:no-repeat;backface-visibility:hidden;-webkit-backface-visibility:hidden;background-color:#f4ead8}
+.leaf .back{transform:rotateY(180deg)}
+.leaf .face::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.22),transparent 55%);opacity:0;animation:none}
+.leaf.turning{display:block}
+.leaf.turning .face::after{opacity:var(--sh,0)}
+@keyframes shade{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.flipnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px;font-weight:700;font-size:.9rem}
+.flipnav button{font:inherit;font-size:1.2rem;line-height:1;background:rgba(255,255,255,.18);color:inherit;border:1.5px solid currentColor;border-radius:999px;width:38px;height:38px;cursor:pointer}
+.flipnav button:disabled{opacity:.35;cursor:default}
+
+@media (max-width:760px){
+  .dw,.band .in{grid-template-columns:minmax(0,1fr)}
+  .dw.alt .stage,.band.rev .art{order:0}
+  .door{min-height:420px}
+}
+/* ================= scroll-driven works: the work stays put, your finger plays it ================= */
+.scrub{position:relative}
+.scrub > .pin{position:sticky;z-index:1}
+.scrub .run{height:0;pointer-events:none}
+#design .scrub > .dw{background:var(--paper)}
+.scrub .stage *,.scrub .stage svg,.scrub .chat *,.scrub .fbook *{transition:none!important}
+.scrub .stage .say{transition:opacity .2s!important}
+.dw.pre .stage,.dw.rv .stage{transition:clip-path 1s var(--ease)!important}
+.chat{overflow:hidden;height:min(66svh,560px);align-content:start}
+.chat .feed{display:grid;gap:6px;will-change:transform}
+.chat .msg{width:min(78%,300px)}
+.neko-pin{background:var(--sun);padding-top:12px}.neko-pin .sub{margin-bottom:16px}.neko-pin .chat{height:min(58svh,520px)}
+.leaf .face::after{animation:none!important}
+@media (max-width:760px){
+  .scrub .dw .stage{order:2!important}
+  .scrub .dw{padding-block:24px;gap:14px}
+  .scrub .dw p{font-size:1rem}
+  .scrub .band .art{order:2}
+  .scrub .band{padding-block:24px}
+  .scrub .band .in{gap:14px}
+}
+
+/* ================= every piece of a series, edge to edge, no mats ================= */
+.series{display:flex;flex-wrap:wrap;gap:12px;padding:0 0 56px;border-bottom:1px solid var(--hair)}
+.series::after{content:"";flex:10 1 0}
+.pc{all:unset;cursor:zoom-in;display:block;box-sizing:border-box}
+.series .pc{flex:var(--r) 1 calc(var(--r)*190px);aspect-ratio:var(--r);max-width:calc(var(--r)*330px)}
+.series img,.logos img{width:100%;height:100%;object-fit:contain;display:block;box-shadow:0 1px 2px rgba(0,0,0,.08),0 6px 18px rgba(0,0,0,.06);transition:transform .35s var(--ease)}
+.series .pc:hover img{transform:translateY(-4px)}
+.pc:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+.logos{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,120px),1fr));gap:10px;width:100%}
+.logos .pc{aspect-ratio:1;background:#fff;border:1px solid var(--hair);display:grid;place-items:center;padding:14%}
+.logos img{box-shadow:none}
+.stage .layer img,.stage > img{box-shadow:0 1px 2px rgba(0,0,0,.1),0 10px 28px rgba(0,0,0,.08)}
+/* home tiles: one frame size, cropped on purpose; the full works live in each world */
+.ab-d .t-img,.ab-i .t-img{aspect-ratio:4/5;padding:0;background:none;display:block;overflow:hidden}
+.ab-d .tile img,.ab-i .tile img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;object-position:50% 30%;box-shadow:none;transition:transform .6s var(--ease)}
+.ab-d .tile img{transform:scale(1.1)}
+.ab-i .tile:hover img{transform:scale(1.05)}.ab-d .tile:hover img{transform:scale(1.155)}
+.ab-d .tile:hover .t-img{background:none}
+.ab-d .t-img{outline:1px solid var(--hair);outline-offset:-1px}
+.ab-c .tiles{grid-template-columns:repeat(auto-fill,minmax(min(100%,96px),1fr))}
+.ab-c .t-img{aspect-ratio:3/4;display:flex;align-items:flex-end;justify-content:center}
+.ab-c .tile img{max-height:100%;max-width:100%;object-fit:contain}
+/* every character */
+.cast{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:18px 10px}
+.cast .pc{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.cast img{height:170px;width:100%;object-fit:contain;object-position:bottom;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.cast .pc:hover img{transform:translateY(-10px)}
+.cast .pill{font-size:.78rem}
+/* lightbox */
+.lb{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100dvh;overflow:hidden}
+.lb::backdrop{background:rgba(20,20,24,.92)}
+.lb[open]{display:grid;place-items:center}
+.lb img{max-width:min(92vw,1100px);max-height:84dvh;width:auto;height:auto;object-fit:contain;background:transparent}
+.lb button{position:fixed;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;width:44px;height:44px;font-size:1.4rem;line-height:1;cursor:pointer}
+.lb-x{top:14px;right:14px}.lb-p{left:12px;top:50%;transform:translateY(-50%)}.lb-n{right:12px;top:50%;transform:translateY(-50%)}
+.lb-c{position:fixed;bottom:16px;left:0;right:0;text-align:center;color:#fff;font:500 .85rem var(--sans);opacity:.8}
+@media (max-width:760px){.series{gap:8px;padding-bottom:36px}.series .pc{flex-basis:calc(var(--r)*120px)}.cast img{height:130px}}
+
+/* ================= world switch: one frame that travels and takes on each world's shape ================= */
+.switch{position:relative}
+.switch a{position:relative;z-index:1}
+.switch a[aria-current]{border-color:transparent}
+.sw-ind{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;box-sizing:border-box;border:1px solid currentColor;border-radius:2px;opacity:0;
+  --sw:.6s cubic-bezier(.6,0,.2,1);transition:left var(--sw),top var(--sw),width var(--sw),height var(--sw),border-radius var(--sw),border-width var(--sw),opacity .3s}
+.sw-ind.on{opacity:1}
+.sw-ind.w-d{border-width:1px}
+.sw-ind.w-i{border-width:2.5px}
+.sw-ind.w-c{border-width:2px}
+/* arriving in a world, its frame appears in that world's manner */
+@keyframes swRule{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes swStroke{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+@keyframes swPop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.14);opacity:1}100%{transform:scale(1)}}
+.sw-ind.enter.w-d{animation:swRule 1s cubic-bezier(.65,0,.35,1) both}
+.sw-ind.enter.w-i{animation:swStroke .45s cubic-bezier(.2,.8,.2,1) both}
+.sw-ind.enter.w-c{animation:swPop .55s cubic-bezier(.3,1.5,.5,1) both}
+
+/* phones: the switch is a thumb-sized segmented bar; the frame follows taps and sideways swipes */
+@media (max-width:760px){
+  .bar .switch{flex:1 1 100%;display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .bar .switch a{text-align:center;padding:10px 4px;font-size:.92rem}
+  .bar .switch .s-d{font-size:1.04rem}
+  .sw-ind.dragging{transition:none!important}
+}
+
+
+/* characters: five to a row, room above so the hover lift never clips */
+.ab-c .tiles{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 18px}
+.ab-c .t-img{overflow:visible;aspect-ratio:1/1;padding-top:12px}
+.ab-c .tile img{max-height:100%;max-width:100%}
+.cast{grid-template-columns:repeat(5,minmax(0,1fr));gap:26px 14px}
+.cast img{height:190px}
+.cast .set img{object-fit:contain}
+@media (max-width:760px){.ab-c .tiles,.cast{grid-template-columns:repeat(3,minmax(0,1fr))}.cast img{height:130px}}
+
+
+/* XXX: the camera walks up to the hand-written XXX on the window, and it turns lipstick red */
+.misawa .mp,.isetan .iz,.kasai .kz,.toyo .tz{position:absolute;left:50%;top:50%;height:88%;transform:translate(-50%,-50%);box-shadow:0 1px 2px rgba(0,0,0,.1),0 10px 28px rgba(0,0,0,.08)}
+.misawa .mp img,.misawa .mp svg,.isetan .iz img,.isetan .iz svg,.toyo .tz img{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none}
+.misawa .mp .real{opacity:0}
+.misawa svg{overflow:visible;filter:drop-shadow(0 0 1.2px rgba(0,0,0,.28))}
+.misawa path{fill:none;stroke:#fff;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.misawa .ln2{stroke-width:1.4;opacity:.6}
+.misawa .q{stroke-width:2.8}
+.misawa .d{opacity:0}
+.isetan .iz{aspect-ratio:536/720}
+.isetan .sc+.sc{opacity:0}
+.kasai .kz{aspect-ratio:518/732;will-change:transform}
+.kasai .kz img{position:absolute;max-width:none;max-height:none}
+.kasai .kz .bg{inset:0;width:100%;height:100%}
+.kasai .kz .logo{left:70.27%;top:15.16%;width:7.07%;height:29.37%;mix-blend-mode:multiply}
+.toyo .tz{aspect-ratio:565/724;will-change:transform}
+.xxx .zoom{position:absolute;left:50%;top:50%;height:88%;aspect-ratio:522/701;transform:translate(-50%,-50%);transform-origin:24.9% 38.9%;will-change:transform}
+.xxx .zoom img{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;box-shadow:none}
+.xxx .zoom .ph{box-shadow:0 1px 2px rgba(0,0,0,.1),0 10px 28px rgba(0,0,0,.08)}
+.xxx .zoom .red{opacity:0}
+.xxx .read{position:absolute;left:7%;right:7%;bottom:7%;text-align:left;text-shadow:none;font-style:normal;color:var(--ink)}
+.xxx .read span{display:block;position:absolute;left:0;bottom:0}
+.xxx .read .a{font:500 .72rem/1.4 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:#6b6e76}
+.xxx .read .b{font:400 clamp(1.15rem,2.2vw,1.6rem)/1.2 var(--serif);font-style:italic;color:var(--lip);opacity:0}
+
+
+/* TSUBAKI: the real poster is written onto blank paper, one brush stroke at a time, fast like a calligrapher's hand */
+.tsubaki .tsu{position:absolute;left:50%;top:50%;height:88%;width:auto;aspect-ratio:529/692;transform:translate(-50%,-50%);box-shadow:0 1px 2px rgba(0,0,0,.1),0 10px 28px rgba(0,0,0,.08);overflow:visible}
+
+
+
+/* Wacoal: opens top to bottom */
+.wacoal .layer{perspective:1100px}
+.wacoal .l-closed{transform:none!important}
+.wacoal .l-closed img{transform-origin:50% 0;backface-visibility:hidden}
+.wacoal .l-open{transform:none!important}
+.wacoal .l-open img{transform-origin:50% 100%}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+
+/* ================= real pages: shared header links, about, contact ================= */
+body{background:var(--paper)}
+body[data-world="illustration"]{background:var(--cobalt)}
+body[data-world="character"]{background:var(--sun)}
+.skip{position:absolute;left:12px;top:-60px;z-index:60;background:var(--ink);color:#fff;padding:8px 14px;border-radius:2px;text-decoration:none;font:500 .9rem var(--sans)}
+.skip:focus{top:12px}
+.bar .id{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 22px}
+.links{display:flex;gap:4px}
+.links a{text-decoration:none;font:500 .86rem var(--sans);padding:10px 8px;opacity:.75}
+.links a:hover,.links a[aria-current]{opacity:1;text-decoration:underline;text-underline-offset:4px}
+@media (max-width:760px){.bar .id{width:100%;justify-content:space-between}.links{margin-left:-8px}}
+/* home: who and what, before the doors */
+#home .role,.page .role{font:500 .78rem var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--grey);margin:0 0 12px}
+#home .creds{margin:18px 0 0;font-size:.85rem;color:var(--grey);max-width:62ch}
+#home .creds span{color:var(--ink)}
+#home .creds span::before{content:"·";margin:0 .6em;color:var(--grey)}
+#home .creds span:first-child::before{content:"";margin:0 0 0 .25em}
+/* illustration door: full-strength small text (opacity .7 failed contrast) */
+.d-illust small{opacity:1}
+/* touch screens: the design door plays its trick once when it comes into view */
+.d-design.play .glyph{opacity:0}
+.d-design.play .pic img{opacity:1}
+/* bigger tap areas, same look */
+.views button,.flipnav button{position:relative}
+.views button::before{content:"";position:absolute;left:-3px;right:-3px;top:-11px;bottom:-11px}
+.flipnav button::before{content:"";position:absolute;inset:-4px;border-radius:999px}
+.card .views{min-height:24px}
+.card:not(:has(.views)) .row{margin-bottom:34px}
+/* site footer */
+.site-foot{font-size:.78rem;padding-block:28px 36px;border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)}
+.site-foot p{margin:0 0 4px;opacity:.8}
+.site-foot a{text-decoration:none;border-bottom:1px solid currentColor}
+body[data-world="illustration"] .site-foot{color:#fff}
+body[data-world="character"] .site-foot{color:var(--char-ink)}
+/* the page wipe: first half covers on leaving, second half uncovers on arrival */
+.wipe.cover{animation:wipeCover .38s var(--ease) forwards}
+.wipe.covered{transform:scaleX(1)}
+.wipe.uncover{animation:wipeUncover .42s var(--ease) forwards}
+@keyframes wipeCover{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1);transform-origin:left}}
+@keyframes wipeUncover{from{transform:scaleX(1);transform-origin:right}to{transform:scaleX(0);transform-origin:right}}
+/* about / contact */
+.page{color:var(--ink)}
+.p-head{padding-block:48px 40px;max-width:820px}
+.p-head h1{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.12;text-wrap:balance}
+.p-lead{font-size:1.1rem;color:var(--grey);max-width:60ch;margin:16px 0 0}
+.p-lead a{color:var(--ink)}
+.page h2{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin:36px 0 12px;line-height:1.2}
+.p-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:32px 64px;padding-block:8px 48px;border-top:1px solid var(--hair);padding-top:40px}
+.p-fig{margin:0}
+.p-fig img{width:100%;height:auto;box-shadow:0 1px 2px rgba(0,0,0,.08),0 10px 28px rgba(0,0,0,.08)}
+.p-fig figcaption{font-size:.82rem;color:var(--grey);margin-top:10px}
+.p-text p{font-family:var(--serif);font-size:1.18rem;line-height:1.6;margin:0 0 16px;max-width:58ch}
+.p-text h2{margin-top:28px}
+.p-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 64px;border-top:1px solid var(--hair);padding-block:8px 64px}
+.p-list{list-style:none;margin:0;padding:0}
+.p-list li{padding:12px 0;border-bottom:1px solid var(--hair);font-size:.95rem;color:var(--grey)}
+.p-list b{display:block;color:var(--ink);font-weight:500}
+.p-note{font-size:.82rem;color:var(--grey);margin:14px 0 0;max-width:56ch}
+.p-plain{margin:0;color:var(--grey)}
+.btn{display:inline-block;font:500 1rem var(--sans);background:var(--ink);color:#fff;border:0;border-radius:2px;padding:14px 22px;text-decoration:none;cursor:pointer;min-height:48px}
+.btn:hover{background:#000}
+.p-cta{margin-top:24px}
+.mail{margin:28px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.mail a{font-family:var(--serif);font-size:clamp(1.4rem,3.4vw,2.2rem);text-decoration:none;border-bottom:2px solid currentColor;overflow-wrap:anywhere}
+.copy{font:500 .85rem var(--sans);background:none;border:1px solid var(--ink);border-radius:999px;padding:10px 16px;cursor:pointer;min-height:44px;color:var(--ink)}
+.copied{font-size:.85rem;color:var(--grey)}
+.svc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;padding-bottom:48px}
+.svc a{display:block;padding:24px;text-decoration:none;min-height:200px;transition:transform .35s var(--ease)}
+.svc a:hover{transform:translateY(-4px)}
+.svc small{display:block;font-size:.8rem;margin-bottom:6px}
+.svc h2{margin:0 0 10px}
+.svc p{margin:0;font-size:.95rem}
+.svc-d{border:1px solid var(--hair)}
+.svc-d h2{font-family:var(--serif)}
+.svc-d small{font-family:var(--mincho);letter-spacing:.2em}
+.svc-d p{color:var(--grey)}
+.svc-i{background:var(--cobalt);color:#fff}
+.svc-i h2{font-family:var(--sans);font-weight:800;letter-spacing:-.02em}
+.svc-c{background:var(--sun);color:var(--char-ink);border-radius:26px}
+.svc-c h2{font-family:var(--round);font-weight:700}
+.svc-c small{font-family:var(--maru);font-weight:700}
+.brief{display:grid;gap:14px;max-width:560px}
+.brief label{display:grid;gap:6px;font-size:.85rem;font-weight:500}
+.brief input,.brief select,.brief textarea{font:400 1rem var(--sans);color:var(--ink);background:#fff;border:1px solid #b9bbc2;border-radius:2px;padding:12px;min-height:48px;width:100%}
+.brief textarea{resize:vertical}
+.brief input:focus,.brief select:focus,.brief textarea:focus{outline:2px solid var(--cobalt);outline-offset:1px;border-color:transparent}
+.brief .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.brief .btn{justify-self:start}
+.brief .hint{font-size:.8rem;color:var(--grey);margin:0}
+.brief .err{color:#b3261e;font-size:.85rem;margin:0}
+.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;padding:12px 0 12px 44px;border-bottom:1px solid var(--hair);position:relative;color:var(--grey);font-size:.95rem}
+.steps li::before{content:counter(s);position:absolute;left:0;top:10px;font-family:var(--serif);font-size:1.5rem;color:var(--ink);line-height:1}
+.steps b{display:block;color:var(--ink);font-weight:500}
+@media (max-width:760px){
+  .p-grid,.p-cols,.svc{grid-template-columns:minmax(0,1fr)}
+  .p-grid{gap:24px}
+  .svc a{min-height:0}
+  .brief .two{grid-template-columns:1fr}
+}
+html[data-wipe] .wipe{transform:scaleX(1);background:#fff}
+html[data-wipe="design"] .wipe{background:#1b1c20}
+html[data-wipe="illustration"] .wipe{background:#1f5fd1}
+html[data-wipe="character"] .wipe{background:#ffc21a}
+@media (prefers-reduced-motion:reduce){.wipe{display:none}}
+
+/* ================= lightbox: a series is a vertical scroll, one piece per screen ================= */
+.lb[open]{display:block}
+.lb-track{position:fixed;inset:0;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory;scrollbar-width:none}
+.lb-track::-webkit-scrollbar{display:none}
+.lb-f{margin:0;height:100dvh;display:grid;place-items:center;padding:60px 64px;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;cursor:zoom-out}
+.lb .lb-f img{max-width:min(100%,1100px);max-height:calc(100dvh - 120px);min-height:0;width:auto;height:auto;object-fit:contain;cursor:default}
+.lb button{z-index:2}
+.lb-p,.lb-n{left:auto;right:14px;transform:none}
+.lb-p{top:calc(50% - 54px)}.lb-n{top:calc(50% + 10px)}
+.lb button:disabled{opacity:.3;cursor:default}
+.lb-c{z-index:2;pointer-events:none}
+@media (max-width:760px){.lb-f{padding:60px 12px 56px}.lb .lb-f img{max-height:calc(100dvh - 116px)}.lb-p,.lb-n{display:none}}
+/* characters get their own sunny ground when enlarged */
+body[data-world="character"] .lb::backdrop{background:var(--sun)}
+body[data-world="character"] .lb button{background:#fff;color:var(--char-ink);border:2.5px solid var(--char-ink)}
+body[data-world="character"] .lb-c{color:var(--char-ink);font-family:var(--round);font-weight:600;opacity:1}
+body[data-world="character"] .lb .lb-f img{filter:drop-shadow(6px 6px 0 rgba(42,29,12,.18))}
+/* illustration: paintings are clickable */
+.band .art .pc{display:block;cursor:zoom-in}
+.band .art .pc img{transition:transform .35s var(--ease)}
+.band .art .pc:hover img{transform:translateY(-4px)}
+#illustration .pc:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+/* game concept (character) */
+.gc-hero{width:100%;margin:0 0 8px}
+.gc-hero img{width:100%;height:auto;display:block}
+.gc-h{font-size:1rem;font-weight:700;margin:18px 0 10px}
+#game-concept .series{padding-bottom:20px;border-bottom:0}
+#game-concept .series .pc{max-width:calc(var(--r)*220px)}
+/* Manten Sensei pixel art */
+.mt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(94px,1fr));gap:6px}
+.mt-grid .pc img{width:100%;height:auto;aspect-ratio:94/72;object-fit:cover;display:block;image-rendering:pixelated;transition:transform .25s var(--ease)}
+.mt-grid .pc:hover img{transform:scale(1.08)}
+.mt-grid .mt-wide{grid-column:span 2;grid-row:span 2;align-self:center}
+.mt-grid .mt-wide img{aspect-ratio:auto;object-fit:contain;image-rendering:auto;background:#fff}
+@media (max-width:760px){.mt-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}}
+.lb .lb-f img[src*="/px/"]{image-rendering:pixelated;width:min(100%,940px);height:auto}
+#resto .stage{background:#f3f3f1}#resto .stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:18px;box-sizing:border-box;filter:drop-shadow(0 4px 12px rgba(0,0,0,.08))}
+#street-objects .art.row{grid-template-columns:repeat(2,minmax(0,1fr))}

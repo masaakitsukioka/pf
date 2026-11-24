@@ -1,0 +1,5 @@
+# macOS が自動で作るファイル
+._*
+.DS_Store
+# 作業メモ（公開しない）
+README.txt
